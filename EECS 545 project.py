@@ -56,7 +56,7 @@ def gen_RSI(df, periods=5):
     rs = up_avg / down_avg
     rsies[periods-1] = 100 - 100 / (1 + rs)
 
-    for j in range(periods + 1, length):
+    for j in range(periods, length):
         up = 0
         down = 0
         if array_list[j] >= array_list[j - 1]:
@@ -68,8 +68,8 @@ def gen_RSI(df, periods=5):
         up_avg = (up_avg * (periods - 1) + up) / periods
         down_avg = (down_avg * (periods - 1) + down) / periods
         rs = up_avg / down_avg
-        rsies[j-1] = 100 - 100 / (1 + rs)
-    return rsies
+        rsies[j] = 100 - 100 / (1 + rs)
+    return df
 
 
 # In[93]:
