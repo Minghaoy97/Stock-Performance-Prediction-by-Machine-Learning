@@ -197,4 +197,5 @@ def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
     D = np.array(D)
     D = D + 0.001
     CCI = (M - SM)/D/0.015
-    return(CCI)
+    data["CCI" + str(n)]  =  CCI
+    return(data)
