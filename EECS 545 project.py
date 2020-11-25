@@ -191,4 +191,5 @@ def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
         d = d/n
         D = D.append(d)
     CCI = (M - SM)/(0.015*D)
-    return CCI
+    data["CCI" + str(n)]  =  CCI
+    return data
