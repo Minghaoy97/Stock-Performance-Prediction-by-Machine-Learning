@@ -168,3 +168,19 @@ def gen_K_percent(data, n=5):
             HH = data[j-n+1:j+1]["High"].max()
             data.at[j,"Stochastic_K%"] = ((data.iloc[j]["Close"] - LL)/(HH - LL)) * 100
     return data
+
+def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
+    M = (high_col + low_col + close_col)/3
+    N = np.ones(n)
+    w = N/n
+    SM = np.convolve(w,M)[n-1:-n+1]
+    D = []
+    for i in range (0,M.shape[0])
+        d = 0
+        for j in range (0,n)
+            e = abs(M[i-j] - SM[i])
+            d = d + e
+        d = d/n
+        D = D.append(d)
+    CCI = (M - SM)/(0.015*D)
+    return CCI
