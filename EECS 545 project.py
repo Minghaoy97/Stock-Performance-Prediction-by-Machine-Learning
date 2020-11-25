@@ -158,3 +158,13 @@ def Larry(data,periods_long=14,open_col='Open', high_col='High', low_col='Low', 
     Larry=[np.nan]*15+Larry
     data["Larry" + str(periods_long)]  =  Larry
     return data
+
+def gen_K_percent(df, n=5):
+    for j in range(len(df)):
+        if j - (n-1) <= 0:
+            df.at[j,"K%"] = np.nan
+        else:
+            LL = df[j-n+1:j+1]["Low"].min()
+            HH = df[j-n+1:j+1]["High"].max()
+            df.at[j,"Stochastic_K%"] = ((df.iloc[j]["Close"] - LL)/(HH - LL)) * 100
+    return df
