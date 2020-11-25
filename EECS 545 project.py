@@ -159,14 +159,22 @@ def Larry(data,periods_long=14,open_col='Open', high_col='High', low_col='Low', 
     data["Larry" + str(periods_long)]  =  Larry
     return data
 
-def gen_K_percent(data, n=5):
+def gen_KandD_percent(data, n=5):
     for j in range(len(data)):
         if j - (n-1) <= 0:
-            data.at[j,"Stochastic_K%"] = np.nan
+            data.at[j,"Stochastic_K%"] = 0
         else:
             LL = data[j-n+1:j+1]["Low"].min()
             HH = data[j-n+1:j+1]["High"].max()
             data.at[j,"Stochastic_K%"] = ((data.iloc[j]["Close"] - LL)/(HH - LL)) * 100
+    for j in range(len(data)):
+        if j - (n-1) <= 0:
+            data.at[j,"Stochastic_D%"] = 0
+        else:
+            value = 0
+            for i in range(n):
+                value += data.at[j-(n - i),"Stochastic_K%"]
+            data.at[j,"Stochastic_D%"] = value / 1000
     return data
 
 def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
