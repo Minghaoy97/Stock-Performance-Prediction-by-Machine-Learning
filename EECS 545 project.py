@@ -178,18 +178,23 @@ def gen_KandD_percent(data, n=5):
     return data
 
 def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
-    M = (high_col + low_col + close_col)/3
+    M = np.array((data[high_col] + data[low_col] + data[close_col])/3)
     N = np.ones(n)
     w = N/n
     SM = np.convolve(w,M)[n-1:-n+1]
+    SM = np.array(SM)
+    SM = np.r_[np.zeros(n-1),SM]
     D = []
-    for i in range (0,M.shape[0])
+    for i in range (0,n):
+        D.append(0)
+    for i in range (n,M.shape[0]):
         d = 0
-        for j in range (0,n)
+        for j in range (0,n):
             e = abs(M[i-j] - SM[i])
             d = d + e
         d = d/n
-        D = D.append(d)
-    CCI = (M - SM)/(0.015*D)
-    data["CCI" + str(n)]  =  CCI
-    return data
+        D.append(d)
+    D = np.array(D)
+    D = D + 0.001
+    CCI = (M - SM)/D/0.015
+    return(CCI)
