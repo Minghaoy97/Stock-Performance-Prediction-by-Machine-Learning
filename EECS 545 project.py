@@ -69,6 +69,7 @@ def gen_RSI(df, periods=5):
         down_avg = (down_avg * (periods - 1) + down) / periods
         rs = up_avg / down_avg
         rsies[j] = 100 - 100 / (1 + rs)
+    df["RSI"+" "+str(periods)] = rsies
     return df
 
 
