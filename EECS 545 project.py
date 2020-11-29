@@ -160,23 +160,16 @@ def Larry(data,periods_long=14,open_col='Open', high_col='High', low_col='Low', 
     data["Larry" + str(periods_long)]  =  Larry
     return data
 
-def gen_KandD_percent(data, n=5):
-    for j in range(len(data)):
-        if j - (n-1) <= 0:
-            data.at[j,"Stochastic_K%"] = 0
-        else:
-            LL = data[j-n+1:j+1]["Low"].min()
-            HH = data[j-n+1:j+1]["High"].max()
-            data.at[j,"Stochastic_K%"] = ((data.iloc[j]["Close"] - LL)/(HH - LL)) * 100
-    for j in range(len(data)):
-        if j - (n-1) <= 0:
-            data.at[j,"Stochastic_D%"] = 0
-        else:
-            value = 0
-            for i in range(n):
-                value += data.at[j-(n - i),"Stochastic_K%"]
-            data.at[j,"Stochastic_D%"] = value / 1000
-    return data
+def gen_KandD_percent(df, n=9):
+    low_list = df['Low'].rolling(9, min_periods=9).min()
+    low_list.fillna(value = df['Low'].expanding().min(), inplace = True)
+    high_list = df['High'].rolling(9, min_periods=9).max()
+    high_list.fillna(value = df['High'].expanding().max(), inplace = True)
+    rsv = (df['Close'] - low_list) / (high_list - low_list) * 100
+    df['K'] = pd.DataFrame(rsv).ewm(com=2).mean()
+    df['D'] = df['K'].ewm(com=2).mean()
+    df['J'] = 3 * df['K'] - 2 * df['D']
+    return df
 
 def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
     M = np.array((data[high_col] + data[low_col] + data[close_col])/3)
