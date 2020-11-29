@@ -132,14 +132,14 @@ def gen_average_true_range(data, trend_periods=14, open_col='Open', high_col='Hi
 
 
 # In[ ]:
-def Momentum(data,trend_periods=9,column='Close'):
+def gen_Momentum(data,trend_periods=9,column='Close'):
     array_list = data["Close"]
     length = len(array_list)
     Momen=[]
-    for i in range(10,length):
+    for i in range(trend_periods,length):
         M=array_list[i]-array_list[i-trend_periods]
         Momen.append(M)
-    Momen=[np.nan]*10+Momen
+    Momen=[np.nan]*(trend_periods)+Momen
     data["Momentum" + str(trend_periods)]  =  Momen
     return data
 
