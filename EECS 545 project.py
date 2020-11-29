@@ -144,19 +144,19 @@ def gen_Momentum(data,trend_periods=9,column='Close'):
     return data
 
 # In[ ]:
-def Larry(data,periods_long=14,open_col='Open', high_col='High', low_col='Low', close_col='Close'):
+def gen_Larry(data,periods_long=14,open_col='Open', high_col='High', low_col='Low', close_col='Close'):
     Close = data[close_col]
     Open = data[open_col]
     High = data[high_col]
     Low = data[low_col]
     Larry=[]
     length=len(Close)
-    for i in range(periods_long+1,length):
+    for i in range(periods_long,length):
         Hn=High[i:i+periods_long].max()
         Ln=Low[i:i+periods_long].min()
         L=(Hn-Close[i])*100/(Hn-Ln)
         Larry.append(L)
-    Larry=[np.nan]*15+Larry
+    Larry=[np.nan]*periods_long+Larry
     data["Larry" + str(periods_long)]  =  Larry
     return data
 
