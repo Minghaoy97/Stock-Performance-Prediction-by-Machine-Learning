@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[78]:
+# In[60]:
 
 
 import xlrd  
 
-print('Please input the fundamental xlsx file name:') # For example, apple.xlsx
+print('Please input the fundamental xlsx file name:') # For example, Coke.xlsx
 fundamental_filename = input()
-print('Please input the price cvs file name:')# For example, AAPL.csv
+print('Please input the price cvs file name:')# For example, COKE.csv
 price_filename = input()
 
 
-# In[85]:
+# In[61]:
 
 
 import pandas as pd
@@ -38,7 +38,7 @@ for i in select_data:
 data = DataFrame(fund_data)
 
 
-# In[86]:
+# In[62]:
 
 
 import numpy as np
@@ -198,7 +198,7 @@ def gen_CCI(data, n, high_col='High', low_col='Low', close_col='Close'):
     return data
 
 
-# In[88]:
+# In[63]:
 
 
 df = pd.read_csv(price_filename)
@@ -208,13 +208,13 @@ df = gen_ewma(df, ma = 5)
 df = gen_ADO(df, trend_periods=5)
 df = gen_macd(df, period_long=26, period_short=12, period_signal=9)
 df = gen_average_true_range(df, trend_periods=14)
-df = Momentum(df,trend_periods=9)
-df = Larry(df,periods_long=14)
+df = gen_Momentum(df,trend_periods=9)
+df = gen_Larry(df,periods_long=14)
 df = gen_KandD_percent(df, 5)
 df = gen_CCI(df, 5)
 
 
-# In[95]:
+# In[64]:
 
 
 complete_data = DataFrame()
@@ -225,7 +225,7 @@ month_index = -1
 combined_df = pd.DataFrame()
 
 for i in range(len(df)):
-    date = df.loc[i][0].split('/') #list of date
+    date = df.loc[i][0].split('-') #list of date
     year_label = int(date[0])
     month = int(date[1])
     if month > 9 and month <= 12:
@@ -244,15 +244,9 @@ for i in range(len(df)):
     combined_df = combined_df.append(tmp_df)
 
 
-# In[94]:
+# In[65]:
 
 
 combined_file_name = price_filename.split('.')[0] + '_combined.csv'
 combined_df.to_csv(combined_file_name, index = False)
-
-
-# In[ ]:
-
-
-
 
